@@ -66,6 +66,7 @@ install_aur() {
 	if [ $? -ne 0 ]; then
 		msg "Installing package '$1' from AUR."
 		yay -S --noconfirm $1
+		msg2 "Done."
 	else
 		msg "Package '$1' already installed."
 	fi
@@ -76,6 +77,7 @@ install_arch() {
 	if [ $? -ne 0 ]; then
 		msg "Installing package '$1' from arch repository."
 		sudo pacman -S $1
+		msg2 "Done."
 	else
 		msg "Package '$1' already installed."
 	fi
@@ -92,5 +94,12 @@ msg "Copying user settings."
 mkdir -p $HOME/.config/Code/User
 mv $HOME/.config/Code/User/settings.json settings.json.old
 ln -s $PWD/settings.json $HOME/.config/Code/User/settings.json
+
+msg "Set default app for opening directories to Nautilus? [y/n]"
+read answer
+if [ "$answer" != "${answer#[Yy]}" ]; then
+	xdg-mime default org.gnome.Nautilus.desktop inode/directory
+	msg2 "Done."
+fi
 
 msg2 "Successfully configured Visual Studio Code."
