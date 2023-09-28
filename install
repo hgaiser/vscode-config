@@ -1,0 +1,96 @@
+#!/bin/bash
+
+# Check if messages are to be printed using color.
+unset ALL_OFF BOLD BLUE GREEN RED YELLOW
+
+if [[ -t 2 ]]; then
+	# Prefer terminal safe colored and bold text when tput is supported.
+	if tput setaf 0 &>/dev/null; then
+		ALL_OFF="$(tput sgr0)"
+		BOLD="$(tput bold)"
+		BLUE="${BOLD}$(tput setaf 4)"
+		GREEN="${BOLD}$(tput setaf 2)"
+		RED="${BOLD}$(tput setaf 1)"
+		YELLOW="${BOLD}$(tput setaf 3)"
+	else
+		ALL_OFF="\e[1;0m"
+		BOLD="\e[1;1m"
+		BLUE="${BOLD}\e[1;34m"
+		GREEN="${BOLD}\e[1;32m"
+		RED="${BOLD}\e[1;31m"
+		YELLOW="${BOLD}\e[1;33m"
+	fi
+fi
+readonly ALL_OFF BOLD BLUE GREEN RED YELLOW
+
+plain() {
+	local mesg=$1; shift
+	printf "${BOLD}    ${mesg}${ALL_OFF}\n" "$@" >&2
+}
+
+msg() {
+	local mesg=$1; shift
+	printf "${GREEN}==>${ALL_OFF}${BOLD} ${mesg}${ALL_OFF}\n" "$@" >&2
+}
+
+msg2() {
+	local mesg=$1; shift
+	printf "${BLUE}  ->${ALL_OFF}${BOLD} ${mesg}${ALL_OFF}\n" "$@" >&2
+}
+
+warning() {
+	local mesg=$1; shift
+	printf "${YELLOW}==> WARNING:${ALL_OFF}${BOLD} ${mesg}${ALL_OFF}\n" "$@" >&2
+}
+
+error() {
+	local mesg=$1; shift
+	printf "${RED}==> ERROR:${ALL_OFF}${BOLD} ${mesg}${ALL_OFF}\n" "$@" >&2
+}
+
+exit_error() {
+	error "$1"
+	exit 1
+}
+
+install_extension() {
+	local extension_id=$1
+
+	msg "Installing extension '$extension_id'."
+	code --install-extension "$extension_id" --force &> /dev/null || exit 1
+	msg2 "Done."
+}
+
+install_aur() {
+	pacman -Qi $1 &> /dev/null
+	if [ $? -ne 0 ]; then
+		msg "Installing package '$1' from AUR."
+		yay -S --noconfirm $1
+	else
+		msg "Package '$1' already installed."
+	fi
+}
+
+install_arch() {
+	pacman -Qi $1 &> /dev/null
+	if [ $? -ne 0 ]; then
+		msg "Installing package '$1' from arch repository."
+		sudo pacman -S $1
+	else
+		msg "Package '$1' already installed."
+	fi
+}
+
+msg "Installing dependencies."
+install_arch neovim || exit_error "Failed to install Arch dependencies."
+install_aur visual-studio-code-bin || exit_error "Failed to install Visual Studio Code."
+
+msg "Installing extensions."
+cat extensions | while read extension_id; do install_extension $extension_id || error "Failed to install '$extension_id'."; done
+
+msg "Copying user settings."
+mkdir -p $HOME/.config/Code/User
+mv $HOME/.config/Code/User/settings.json settings.json.old
+ln -s $PWD/settings.json $HOME/.config/Code/User/settings.json
+
+msg2 "Successfully configured Visual Studio Code."
