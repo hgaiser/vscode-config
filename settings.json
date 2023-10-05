@@ -4,10 +4,6 @@
     "window.titleBarStyle": "custom",
     "editor.hover.enabled": false,
     "workbench.list.openMode": "doubleClick",
-    "extensions.experimental.affinity": {
-        "asvetliakov.vscode-neovim": 1
-    },
-    "vscode-neovim.neovimExecutablePaths.linux": "/usr/bin/nvim",
     "workbench.colorCustomizations": {
         "editorWhitespace.foreground": "#333333"
     },
@@ -28,4 +24,8 @@
     "workbench.editor.decorations.badges": false,
     "editor.fontFamily": "'RobotoMono Nerd Font', 'monospace', monospace",
     "extensions.ignoreRecommendations": true,
+    "editor.lightbulb.enabled": false,
+    "breadcrumbs.enabled": false,
+    "rust-analyzer.check.command": "clippy",
+    "editor.inlayHints.enabled": "offUnlessPressed",
 }
