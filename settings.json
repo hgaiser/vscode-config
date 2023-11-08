@@ -2,7 +2,6 @@
     "workbench.colorTheme": "Gruvbox Dark Hard",
     "editor.renderWhitespace": "boundary",
     "window.titleBarStyle": "custom",
-    "editor.hover.enabled": false,
     "workbench.list.openMode": "doubleClick",
     "workbench.colorCustomizations": {
         "editorWhitespace.foreground": "#333333"
@@ -14,18 +13,32 @@
     "workbench.layoutControl.enabled": false,
     "window.commandCenter": false,
     "editor.minimap.renderCharacters": false,
-    "editor.minimap.enabled": false,
     "window.menuBarVisibility": "toggle",
     "workbench.activityBar.visible": false,
     "telemetry.telemetryLevel": "off",
     "window.restoreWindows": "none",
     "editor.renderFinalNewline": "off",
     "explorer.decorations.badges": false,
-    "workbench.editor.decorations.badges": false,
     "editor.fontFamily": "'RobotoMono Nerd Font', 'monospace', monospace",
     "extensions.ignoreRecommendations": true,
     "editor.lightbulb.enabled": false,
-    "breadcrumbs.enabled": false,
     "rust-analyzer.check.command": "clippy",
     "editor.inlayHints.enabled": "offUnlessPressed",
+    "window.density.editorTabHeight": "compact",
+    "editor.hover.enabled": false,
+    "security.workspace.trust.untrustedFiles": "open",
+    "editor.autoClosingBrackets": "never",
+    "svelte.enable-ts-plugin": true,
+    "git.openRepositoryInParentFolders": "never",
+    "editor.semanticTokenColorCustomizations": {
+        "enabled": true,
+        "rules": {
+            "*.mutable": {
+                "underline": false,
+            }
+        }
+    },
+    "editor.minimap.autohide": true,
+    "workbench.tree.indent": 12,
+    "workbench.editor.decorations.badges": false,
 }
